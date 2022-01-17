@@ -32,11 +32,11 @@ end = Point()
 found = False
 done_solving=False
 
-dir4 = [Point(0, -1), Point(0, 1), Point(1, 0), Point(-1, 0)]
+dir4 = [Point(0, -1), Point(0, 1), Point(1, 0), Point(-1, 0)]   
 #functions
 def BFS(s,e):
     global img, h,w,dir4,found,done_solving
-    const = 200
+    const = 200000
     q = []
     v = [ [0 for j in range(w)] for i in range(h)]
     parent = [[Point() for j in range(w)] for i in range(h)]
@@ -66,7 +66,7 @@ def BFS(s,e):
         path.append(p)
         path.reverse()
         for p in path:
-            img[p.y][p.x] = [250,255,250]
+            img[p.y][p.x] = [255,255,0]
         print("path found")
         done_solving=True;
     else:
@@ -115,7 +115,10 @@ def mouse_event_handler():
 
 def re_renderTk():
     global img
+    cv2.imwrite("solved.png",img)
     imgTk=Image.fromarray(img)
+    newsize = (MidFrame.winfo_width(),MidFrame.winfo_height())
+    imgTk=imgTk.resize(newsize,resample=0)
     imgTk = ImageTk.PhotoImage(imgTk)
     imageRender.configure(image=imgTk)
     imageRender.image = imgTk
@@ -126,6 +129,8 @@ def open_img():
     global loc
     loc = filedialog.askopenfilename()     
     imgTk = Image.open(loc)
+    newsize = (MidFrame.winfo_width(),MidFrame.winfo_height())
+    imgTk=imgTk.resize(newsize,resample=0)
     imgTk = ImageTk.PhotoImage(imgTk)
     imageRender.configure(image=imgTk)
     imageRender.image = imgTk
@@ -182,7 +187,7 @@ solvedImageRender.bind()
 # BUTTON
 openImageButton = Button(BottomFrame, text='Open Image', command=lambda: open_img())
 openImageButton.pack()
-submitImageButton = Button(BottomFrame, text='Submit Image', command=lambda: mouse_event_handler())
+submitImageButton = Button(BottomFrame, text='Solve Maze', command=lambda: mouse_event_handler())
 submitImageButton.pack()
 
 window.mainloop()
